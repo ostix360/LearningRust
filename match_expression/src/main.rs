@@ -5,15 +5,27 @@ enum IPAdress{
 }
 
 impl IPAdress{
+	// fn request(&self,dest: &IPAdress) -> bool{
+		// match self{
+			// IPAdress::V4(a, b, c, d) => {
+								// match dest{
+									// IPAdress::V4(f, g, h, i) => a == f && b == g && c == h,
+									// _ => false
+								// }
+							// },
+			// _ => false
+		// }
+	// }
+	
 	fn request(&self,dest: &IPAdress) -> bool{
-		match self{
-			IPAdress::V4(a, b, c, d) => {
-								match dest{
-									IPAdress::V4(f, g, h, i) => a == f && b == g && c == h,
-									_ => false
-								}
-							},
-			_ => false
+		if let IPAdress::V4(a, b, c, d) = self{
+			if let IPAdress::V4(f, g, h, i) = dest{
+				true
+			}else{
+				false
+			}
+		}else{
+			false
 		}
 	}
 }
