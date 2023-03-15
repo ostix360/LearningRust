@@ -16,5 +16,24 @@ fn main() {
 	
 	// v.push(6);  //illegal 
 	// println!("{}", i) //utilisation de i alors que la ref a disparue a cause du push qui realloue la memoire
-	
+	for i in &v{
+		println!("{}", i);
+	}
+
+	let mut v3 = vec![100, 32, 57];
+
+	for i in &mut v3{
+		*i += 50;
+	}
+
+	#[derive(Debug)]
+	enum Cellule{
+		Int(i32),
+		Float(f64),
+		Text(String)
+	}
+	let ligne = vec![
+		Cellule::Text(String::from("bleu")),
+	];
+	println!("{:?}",ligne);
 }
