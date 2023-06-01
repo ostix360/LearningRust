@@ -16,19 +16,13 @@ pub struct Operation{
 
 impl Operation{
     pub fn new(v1: f32, v2: f32,op :&str) -> Result<Operation,Error> {
-        let operator: Operator;
-        if op == "+".to_string(){
-            operator = Operator::Add
-        }else if op == "-".to_string(){
-            operator = Operator::Sub
-        }else if op == "*".to_string(){
-            operator = Operator::Mult
-        }else if op == "/".to_string(){
-            operator = Operator::Div
-        }else{
-            return Err(Error::new(ErrorKind::Other, "Opérateur non trouvé"))
-        }
-
+        let operator = match op {
+            "+" => Operator::Add,
+            "-" => Operator::Sub,
+            "*" => Operator::Mult,
+            "/" => Operator::Div,
+            _ => return Err(Error::new(ErrorKind::Other, "Opérateur non trouvé"))
+        };
         Ok(Operation{operator, v1, v2})
     }
 
@@ -47,7 +41,7 @@ impl Operation{
 }
 
 
-fn main() {
+fn main() -> Result<(), Box<dyn std::error::Error>>{
     let mut restart: bool = true;
 
     while restart{
@@ -60,27 +54,16 @@ fn main() {
         let op = ask_operator();
 
         
-        let operation: Operation = match Operation::new(v1, v2, &op.to_string()){
-            Ok(op) => op,
-            Err(err) => {
-                println!("Une erreur s'est produite : {}", err);
-                continue;
-            }
-        };
+        let operation: Operation = Operation::new(v1, v2, &op)?;
 
-        let result: f32 = match operation.calcul(){
-            Ok(r) => r,
-            Err(err) => {
-                println!("Une erreur s'est produite : {}", err);
-                continue;
-            }
-        };
-        println!("{} {} {} = {}", v1, &op.to_string(), v2, result);
+        let result: f32 = operation.calcul()?;
+        println!("{} {} {} = {}", v1, &op, v2, result);
         println!("--------------------------------------");
         println!("Avez vous d'autre calcule à effectuer?");
         restart = ask_restart();
     }
     println!("Merci et au revoir!");
+    Ok(())
 }
 
 fn ask_number() -> f32{
@@ -98,15 +81,11 @@ fn ask_operator() -> String{
     loop{
         let mut op = String::new();
         io::stdin().read_line(&mut op).expect("Error while reading user input");
-        let op = op.replace("\n", "");
-        if !op.contains("+") &&
-        !op.contains("-") &&
-        !op.contains("*") &&
-        !op.contains("/") {
-            println!("Choisissez un opérateur valide (+,-,*,/)");
-            continue;
+        let op = op.trim();
+        match op {
+            "+"|"-"|"*"|"/" => return op.to_string(),
+            _ => println!("Choisissez un opérateur valide (+,-,*,/)"),
         }
-        return op
     }
 }
 
