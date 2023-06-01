@@ -25,4 +25,10 @@ fn main() {
         }
     });
 
+    // Ou plus simplement
+
+    let f = File::open("file.txt").expect("Error, cannot open file.txt");
+    
+
+
 }
