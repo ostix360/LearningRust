@@ -47,8 +47,7 @@ fn read_file() -> Result<String, io::Error>{
     // fs::read_to_string("file.txt");
     // Ou plus simplement
 
-    let f = File::open("file.txt").expect("Error, cannot open file.txt");
-    
+    // let f = File::open("file.txt").expect("Error, cannot open file.txt");
 
 
 }
