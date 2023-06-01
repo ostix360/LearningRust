@@ -1,5 +1,7 @@
 use std::fs::File;
-use std::io::ErrorKind;
+use std::io;
+use std::io::{ErrorKind, Read};
+use std::fs;
 
 fn main() {
     // let f = File::open("file.txt");
@@ -25,6 +27,24 @@ fn main() {
         }
     });
 
+    let s = match read_file() {
+        Ok(s) => s,
+        Err(e) => panic!("Erreur ah {:?}", e)
+    };
+
+    println!("{}", s)
+}
+
+
+fn read_file() -> Result<String, io::Error>{
+    let mut f = File::open("file.txt")?;
+    let mut s = String::new();
+    f.read_to_string(&mut s)?;
+    Ok(s)
+
+    // Ou
+
+    // fs::read_to_string("file.txt");
     // Ou plus simplement
 
     let f = File::open("file.txt").expect("Error, cannot open file.txt");
