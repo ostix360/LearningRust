@@ -1,11 +1,11 @@
-use traits::{PressArticle, Tweet, Resumable};
+use traits::{PressArticle, Resumable};
 
 fn main() {
-    let article = PressArticle{
+    let article = PressArticle {
         title: "Sleepy Joe".to_string(),
         author: "Trump".to_string(),
         content: "Joe is a sleepy president! \n yes this article is very short!".to_string(),
-        place: "USA".to_string()
+        place: "USA".to_string(),
     };
 
     println!("Let's resum an article: {}", article.resum());
