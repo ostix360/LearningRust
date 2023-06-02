@@ -15,6 +15,8 @@ impl<X1, Y1> Point<X1, Y1>{
 }
 
 
+
+
 fn main() {
     let p1 = Point { x: "Hello", y: "World"};
 
@@ -23,4 +25,22 @@ fn main() {
     let p3 = p1.mix(&p2);
 
     println!("p3.x = {}, p3.y = {}", p3.x, p3.y);
+
+    let l =vec![2,5,8,3,6,1,7,4,8,0,4];
+    println!("Heighter nb: {}", heighter(&l));
+
+    let c = vec!['c', 'à', 'x', 'q', 't'];
+    println!("Heighter char: {}", heighter(&c));
+
+}
+
+fn heighter<T>(liste :&[T]) -> T 
+where T: PartialOrd + Copy{
+    let mut heighter = liste[0];
+    for &e in liste{
+        if e > heighter{
+            heighter = e;
+        }
+    }
+    heighter
 }
