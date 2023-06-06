@@ -11,6 +11,10 @@ impl Rectangle {
     }
 }
 
+pub fn welcomed(name: &str) -> String{
+    String::form("Welcome " + name)
+}
+
 #[cfg(test)]
 mod tests {
     use super::*;
@@ -29,5 +33,12 @@ mod tests {
         let small = Rectangle { width: 4, height: 4};
 
         assert!(!small.contain(&large));
+    }
+
+    #[test]
+    fn welcome(){
+        let res = welcomed("Joe");
+        assert!(res.contain("Joe"),
+    "");
     }
 }
