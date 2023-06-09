@@ -12,7 +12,14 @@ impl Rectangle {
 }
 
 pub fn welcomed(name: &str) -> String{
-    String::form("Welcome " + name)
+    format!("Salut, {} !", name)
+}
+
+pub fn panic_panic() -> bool{
+    if true{
+        panic!("Pas de panic à bord...")
+    }
+    true
 }
 
 #[cfg(test)]
@@ -38,7 +45,21 @@ mod tests {
     #[test]
     fn welcome(){
         let res = welcomed("Joe");
-        assert!(res.contain("Joe"),
-    "");
+        assert!(res.contains("Joe"),
+    "Le message doit contenire le nom mais il vaut seulement  '{}' ", res);
+    }
+
+    #[test]
+    #[should_panic]
+    fn should_panic(){
+        panic_panic();
+    }
+
+    #[test]
+    fn it_works() -> Result<(), String>{
+        if 2 + 2 == 4 {
+            return Ok(());
+        }
+        Err("2 + 2 ne vaut pas 4".to_string())
     }
 }
