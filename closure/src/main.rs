@@ -1,11 +1,41 @@
 use std::thread;
 use std::time::Duration;
 
-fn main() {
-    let user_intensify = 10;
-    let rand = 7;
+struct Cacher<T, U>
+where T: Fn(U) -> U{
+    calcul: T,
+    value: Option<U>,
+}
 
-    generate_exercise(user_intensify, rand);
+impl<T,U> Cacher<T, U> 
+    where T: Fn(U) -> U, U: Copy{
+    fn new(calcul: T) -> Cacher<T, U> {
+        Cacher {
+            calcul,
+            value: None,
+        }
+    }
+
+    fn value(&mut self, arg: U) -> U {
+        match self.value {
+            Some(v) => v,
+            None => {
+                let v = (self.calcul)(arg);
+                self.value = Some(v);
+                v
+            }
+        }
+    }
+    
+}
+
+fn main() {
+    // let user_intensify = 10;
+    // let rand = 7;
+
+    // generate_exercise(user_intensify, rand);
+
+    
 }
 
 fn big_calc(intensity: u32) -> u32 {
