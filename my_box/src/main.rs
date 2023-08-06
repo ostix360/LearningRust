@@ -16,6 +16,12 @@ impl<T> Deref for MyBox<T>{
     }
 }
 
+impl<T> Drop for MyBox<T>{
+    fn drop(&mut self) {
+        println!("Cleaning up");
+    }
+}
+
 fn hi(name: &str){
     println!("Hi, {}!", name);
 }
@@ -26,7 +32,7 @@ fn main() {
 
     assert_eq!(5, x);
     assert_eq!(5, *y);
-
+    drop(x);
     let name = MyBox::new(String::from("Rust"));
     hi(&name);
 }
