@@ -1,21 +1,22 @@
+use std::cell::RefCell;
 use std::rc::Rc;
 use crate::List::{Cons, Nil};
 
+#[derive(Debug)]
 enum List {
-    Cons(i32, Rc<List>),
+    Cons(Rc<RefCell<i32>>, Rc<List>),
     Nil,
 }
 
 fn main() {
-    println!("Hello, world!");
-    let list = Rc::new(Cons(1, Rc::new(Cons(2, Rc::new(
-                Cons(3, Rc::new(Nil)))))));
-    println!("Count after creation of list {}", Rc::strong_count(&list));
-    let a = Cons(0, Rc::clone(&list));
-    println!("Count after creation of a {}", Rc::strong_count(&list));
-    {
-        let b = Cons(-1, Rc::clone(&list));
-        println!("Count after creation of b {}", Rc::strong_count(&list));
-    }
-    println!("Count after b is out of scope {}", Rc::strong_count(&list));
+    let value = Rc::new(RefCell::new(1));
+    let list = Rc::new(Cons(Rc::clone(&value), Rc::new(Nil)));
+    let a = Cons(Rc::new(RefCell::new(0)), Rc::clone(&list));
+    let b = Cons(Rc::new(RefCell::new(-1)), Rc::clone(&list));
+
+    *value.borrow_mut() += 10;
+
+    println!("list after op = {:?}", list);
+    println!("a after op = {:?}", a);
+    println!("b after op = {:?}", b);
 }
