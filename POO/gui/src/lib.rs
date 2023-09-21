@@ -34,6 +34,7 @@ mod tests {
     #[test]
     fn it_works() {
         let result = add(2, 2);
+        let v = vec![(1,2)].into_iter();
         assert_eq!(result, 4);
     }
 }
