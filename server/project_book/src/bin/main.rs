@@ -1,14 +1,19 @@
-use std::fs;
+use std::{fs, thread};
 use std::io::{Read, Write};
 use std::net::{TcpListener, TcpStream};
+use std::time::Duration;
+use project_book::ThreadPool;
 
 fn main() {
     let listening =  TcpListener::bind("127.0.0.1:7878").unwrap();
-
-    for flow in listening.incoming(){
+    let pool = ThreadPool::new(50);
+    for flow in listening.incoming().take(10){
         let flow = flow.unwrap();
-        connexion_handler(flow)
+        pool.execute(|| {
+            connexion_handler(flow)
+        });
     }
+    println!("Everything is shut down")
 }
 
 fn connexion_handler(mut flow: TcpStream){
@@ -16,10 +21,14 @@ fn connexion_handler(mut flow: TcpStream){
     flow.read(&mut buffer).unwrap();
 
     let get = b"GET / HTTP/1.1\r\n";
+    let pause = b"GET /pause HTTP/1.1\r\n";
 
     let (statue, file) = if buffer.starts_with(get) {
         ( "HTTP/1.1 200 OK", "hello.html")
-    }else{
+    }else if buffer.starts_with(pause){
+        thread::sleep(Duration::from_secs(5));
+        ( "HTTP/1.1 200 OK", "hello.html")
+    }else {
         ( "HTTP/1.1 404 NOT FOUND", "404.html")
     };
 
@@ -33,6 +42,4 @@ fn connexion_handler(mut flow: TcpStream){
     flow.write(response.as_bytes()).unwrap();
 
     flow.flush().unwrap();
-
-    println!("Request: {}", String::from_utf8_lossy(&buffer))
 }
